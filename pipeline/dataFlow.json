@@ -1,0 +1,37 @@
+{
+	"name": "dataFlow",
+	"properties": {
+		"activities": [
+			{
+				"name": "dataFlowMoviesBD",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "1.00:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "dataFlowMoviesBD",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"folder": {
+			"name": "pipelineDataflow"
+		},
+		"annotations": [],
+		"lastPublishTime": "2022-04-21T19:46:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

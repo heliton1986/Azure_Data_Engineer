@@ -1,0 +1,98 @@
+{
+	"name": "dataFlowMoviesBD",
+	"properties": {
+		"folder": {
+			"name": "transfMoviesBD"
+		},
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "datasetMoviesDL",
+						"type": "DatasetReference"
+					},
+					"name": "Origem"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "datasetMoviesDLFinal",
+						"type": "DatasetReference"
+					},
+					"name": "Final"
+				}
+			],
+			"transformations": [
+				{
+					"name": "selectCorrecaoNome"
+				},
+				{
+					"name": "AnoAcima1950"
+				},
+				{
+					"name": "derivedGenre"
+				},
+				{
+					"name": "RankingMovies"
+				},
+				{
+					"name": "aggregateRatings"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          movie as string,",
+				"          title as string,",
+				"          genres as string,",
+				"          year as string,",
+				"          Rating as string,",
+				"          {Rotton Tomato} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> Origem",
+				"Origem select(mapColumn(",
+				"          movie,",
+				"          title,",
+				"          genres,",
+				"          year,",
+				"          Rating,",
+				"          {Rotten Tomato} = {Rotton Tomato}",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> selectCorrecaoNome",
+				"selectCorrecaoNome filter(toInteger(year) > 1950) ~> AnoAcima1950",
+				"AnoAcima1950 derive(PrimaryGenre = iif(locate('|', genres) > 1, left(genres, locate('|', genres) - 1), genres)) ~> derivedGenre",
+				"derivedGenre window(over(PrimaryGenre,",
+				"          year),",
+				"     asc({Rotten Tomato}, true),",
+				"     RatingsRank = rank()) ~> RankingMovies",
+				"RankingMovies aggregate(groupBy(PrimaryGenre,",
+				"          year),",
+				"     AverageRating = avg(toInteger({Rotten Tomato})),",
+				"          HighestRated = first(title),",
+				"          LowerRated = last(title),",
+				"          NumberOfMovies = count()) ~> aggregateRatings",
+				"aggregateRatings sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     input(",
+				"          Column_1 as string,",
+				"          Column_2 as string,",
+				"          Column_3 as string,",
+				"          Column_4 as string,",
+				"          Column_5 as string,",
+				"          Column_6 as string",
+				"     ),",
+				"     partitionFileNames:['testandoFinal100.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> Final"
+			]
+		}
+	}
+}

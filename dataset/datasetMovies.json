@@ -1,0 +1,24 @@
+{
+	"name": "datasetMovies",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "HttpServerMovies",
+			"type": "LinkedServiceReference"
+		},
+		"folder": {
+			"name": "formacaoEngDadosDataFactory"
+		},
+		"annotations": [],
+		"type": "DelimitedText",
+		"typeProperties": {
+			"location": {
+				"type": "HttpServerLocation"
+			},
+			"columnDelimiter": ",",
+			"escapeChar": "\\",
+			"quoteChar": "\""
+		},
+		"schema": []
+	},
+	"type": "Microsoft.DataFactory/factories/datasets"
+}
