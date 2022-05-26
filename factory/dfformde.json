@@ -1,0 +1,9 @@
+{
+	"name": "dfformde",
+	"location": "eastus",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "e5b9402c-071d-40b7-a0b1-c2543ff1c2bc",
+		"tenantId": "b0e7335f-fd1f-46ad-98c7-55e6e4e222ea"
+	}
+}
