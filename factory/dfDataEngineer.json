@@ -1,9 +1,0 @@
-{
-	"name": "dfDataEngineer",
-	"location": "brazilsouth",
-	"identity": {
-		"type": "SystemAssigned",
-		"principalId": "38061b73-6715-494f-816f-16885ea18701",
-		"tenantId": "a21144c5-4097-440e-896d-c0887dcc31b5"
-	}
-}
